@@ -1,3 +1,12 @@
+/***************************************************************************
+* Copyright (C) 2017, Deping Chen, cdp97531@sina.com
+*
+* All rights reserved.
+* For permission requests, write to the author.
+*
+* This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
+* KIND, either express or implied.
+***************************************************************************/
 #include "stdafx.h"
 
 #include <cstddef>
@@ -29,8 +38,8 @@
 #include <boost/thread/shared_mutex.hpp>
 #include "Log.h"
 
-boost::log::sources::severity_logger<severity_level> g_slg;
-
+namespace blog
+{
 namespace logging = boost::log;
 namespace src = boost::log::sources;
 namespace expr = boost::log::expressions;
@@ -38,7 +47,9 @@ namespace sinks = boost::log::sinks;
 namespace attrs = boost::log::attributes;
 namespace keywords = boost::log::keywords;
 
-
+namespace
+{
+boost::log::sources::severity_logger<severity_level> g_slg;
 
 // This mutable constant will use shared clocking for reading the value
 // and exclusive locking for storing
@@ -60,25 +71,6 @@ shared_string_att g_fileAtt("");
 shared_int_att g_lineAtt(0);
 //attrs::timer g_timeAtt;
 
-// The operator puts a human-friendly representation of the severity level to the stream
-std::ostream& operator<< (std::ostream& strm, severity_level level)
-{
-    static const char* strings[] =
-    {
-        "normal",
-        "notification",
-        "warning",
-        "error",
-        "critical"
-    };
-
-    if (static_cast< std::size_t >(level) < sizeof(strings) / sizeof(*strings))
-        strm << strings[(int)level];
-    else
-        strm << static_cast< int >(level);
-
-    return strm;
-}
 
 void log_formatter(logging::record_view const& rec, logging::formatting_ostream& strm)
 {
@@ -95,6 +87,28 @@ void log_formatter(logging::record_view const& rec, logging::formatting_ostream&
 
     // Finally, put the record message to the stream
     strm << rec[expr::smessage];
+}
+
+}
+
+// The operator puts a human-friendly representation of the severity level to the stream
+std::ostream& operator<< (std::ostream& strm, severity_level level)
+{
+    static const char* strings[] =
+    {
+        "info",
+        "notice",
+        "warning",
+        "error",
+        "fatal"
+    };
+
+    if (static_cast<std::size_t>(level) < sizeof(strings) / sizeof(*strings))
+        strm << strings[(int)level];
+    else
+        strm << static_cast<int>(level);
+
+    return strm;
 }
 
 void AddLog(severity_level level, const char* file, int line,/* attrs::timer elapsed,*/ const char* msg, ...)
@@ -130,4 +144,5 @@ void InitLog()
 void FlushLog()
 {
     logging::core::get()->flush();
+}
 }
