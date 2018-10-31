@@ -8,8 +8,6 @@
 * KIND, either express or implied.
 ***************************************************************************/
 #include "stdafx.h"
-
-#include <cstddef>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -36,6 +34,7 @@
 #include <boost/log/utility/setup/common_attributes.hpp>
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <boost/thread/shared_mutex.hpp>
+
 #include "Log.h"
 
 namespace blog
@@ -124,7 +123,7 @@ void AddLog(severity_level level, const char* file, int line,/* attrs::timer ela
     BOOST_LOG_SEV(g_slg, level) << buffer;
 }
 
-void InitLog()
+void InitLog(const char* logFileName)
 {
     boost::log::add_common_attributes();
     g_slg.add_attribute("File", g_fileAtt);
@@ -134,7 +133,7 @@ void InitLog()
     typedef sinks::asynchronous_sink<sinks::text_ostream_backend> text_sink;
     boost::shared_ptr<text_sink> sink = boost::make_shared<text_sink>();
 
-    sink->locked_backend()->add_stream(boost::make_shared< std::ofstream>("UpdateApp.log"));
+    sink->locked_backend()->add_stream(boost::make_shared< std::ofstream>(logFileName));
 
     sink->set_formatter(&log_formatter);
 

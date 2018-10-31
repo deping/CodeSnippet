@@ -31,7 +31,7 @@ void AddLog(severity_level level, const char* file, int line,/* attrs::timer ela
 #define LOG_FATAL(msg, ...) blog::AddLog(blog::severity_level::fatal, __FILE__, __LINE__, msg, __VA_ARGS__)
 
 // InitLog must be called before start of main function.
-void InitLog();
+void InitLog(const char* logFileName);
 // FlushLog must be called before end of main function.
 void FlushLog();
 }
