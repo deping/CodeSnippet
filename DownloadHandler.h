@@ -13,4 +13,5 @@ public:
     {
     }
     bool Download(const std::string& fileName, const std::string& toFileName);
+    bool DownloadByAsio(const std::string& fileName, const std::string& toFileName);
 };
