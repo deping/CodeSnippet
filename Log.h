@@ -8,7 +8,6 @@
 * KIND, either express or implied.
 ***************************************************************************/
 #pragma once
-#include <boost/log/sources/severity_logger.hpp>
 
 namespace blog
 {
