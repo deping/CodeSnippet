@@ -143,5 +143,7 @@ void InitLog(const char* logFileName)
 void FlushLog()
 {
     logging::core::get()->flush();
+    logging::core::get()->remove_all_sinks();
+    g_slg.remove_all_attributes();
 }
 }
