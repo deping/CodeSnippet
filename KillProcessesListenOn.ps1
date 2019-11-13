@@ -21,6 +21,14 @@ function KillProcessesListenOn([string[]] $ports) {
 }
 
 KillProcessesListenOn @('6003', '8090', '9993', '8761')
+
+$from = "E:\Jenkins\workspace\SteelStructBackend\"
+$to = "E:\nginx-1.16.0\jar\SteelStruct\"
+copy ($from + "eureka-server\" + "target\eureka-server-0.0.1-SNAPSHOT.jar") -Destination $to
+copy ($from + "calc-service\" + "target\calc-service-0.0.1-SNAPSHOT.jar") -Destination $to
+copy ($from + "spring-apigateway\" + "target\spring-apigateway-0.0.1-SNAPSHOT.jar") -Destination $to
+copy ($from + "RuoYi\" + "ruoyi-admin\target\ruoyi-admin.jar") -Destination $to
+ 
 Write-Output ("`$PSScriptRoot = " + $PSScriptRoot);
 Start-Job -ScriptBlock { java -jar ($args[0] + "\eureka-server-0.0.1-SNAPSHOT.jar") } -ArgumentList $PSScriptRoot # port 8761
 Start-Job -ScriptBlock { java -jar ($args[0] + "\calc-service-0.0.1-SNAPSHOT.jar") } -ArgumentList $PSScriptRoot # port 9993
